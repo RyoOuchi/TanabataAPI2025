@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// index.ts
 const express_1 = __importDefault(require("express"));
 const prisma_1 = require("../src/generated/prisma");
 const prisma = new prisma_1.PrismaClient();

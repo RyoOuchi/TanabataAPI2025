@@ -54,3 +54,12 @@ app.get('/get/:teamId', async (req: Request, res: Response) => {
         res.status(500).send(error)
     }
 });
+
+app.get('/get/all', async (req: Request, res: Response) => {
+    try {
+        const queryResult = await prisma.score.findMany();
+        res.status(200).json(queryResult);
+    } catch(error) {
+        res.status(500).send(error)
+    }
+});
