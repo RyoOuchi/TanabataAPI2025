@@ -2,15 +2,19 @@ import express from 'express';
 import { Request, Response } from 'express';
 import { TypedRequestBody } from './types/req-body-type';
 import { PrismaClient } from '../src/generated/prisma';
+import cors from 'cors';
 
 const prisma = new PrismaClient();
 
 const app = express();
 const PORT = 3000;
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-});
+app.use(cors({
+  origin: '*', // or restrict to your frontend URL
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'ngrok-skip-browser-warning']
+}));
+
 
 app.use(express.json());
 
@@ -55,11 +59,19 @@ app.get('/get/:teamId', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/get/all', async (req: Request, res: Response) => {
-    try {
-        const queryResult = await prisma.score.findMany();
-        res.status(200).json(queryResult);
-    } catch(error) {
-        res.status(500).send(error)
-    }
+app.get('/get-all', async (req: Request, res: Response) => {
+  console.log("GET /get-all route hit");
+  try {
+    const queryResult = await prisma.score.findMany();
+    res.status(200).json(queryResult);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Something went wrong' });
+  }
+});
+
+
+
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
 });

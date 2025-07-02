@@ -14,12 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const prisma_1 = require("../src/generated/prisma");
+const cors_1 = __importDefault(require("cors"));
 const prisma = new prisma_1.PrismaClient();
 const app = (0, express_1.default)();
 const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-});
+app.use((0, cors_1.default)({
+    origin: '*', // or restrict to your frontend URL
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'ngrok-skip-browser-warning']
+}));
 app.use(express_1.default.json());
 app.get('/', (req, res) => {
     res.send('Hello from TypeScript Express!');
@@ -59,3 +62,17 @@ app.get('/get/:teamId', (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(500).send(error);
     }
 }));
+app.get('/get-all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("GET /get-all route hit");
+    try {
+        const queryResult = yield prisma.score.findMany();
+        res.status(200).json(queryResult);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'Something went wrong' });
+    }
+}));
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+});
