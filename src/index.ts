@@ -70,6 +70,19 @@ app.get('/get-all', async (req: Request, res: Response) => {
   }
 });
 
+app.delete('/delete-all', async (req: Request, res: Response) => {
+  try {
+    const deleteResult = await prisma.score.deleteMany();
+    res.status(200).json({
+      message: 'All scores deleted successfully',
+      deletedCount: deleteResult.count
+    });
+  } catch (error) {
+    console.error('Error deleting scores:', error);
+    res.status(500).json({ error: 'Something went wrong while deleting scores' });
+  }
+});
+
 
 
 app.listen(PORT, () => {
