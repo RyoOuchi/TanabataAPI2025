@@ -10,9 +10,9 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors({
-  origin: '*', // or restrict to your frontend URL
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'ngrok-skip-browser-warning']
+  origin: '*',
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
 }));
 
 
