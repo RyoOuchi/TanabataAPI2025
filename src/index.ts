@@ -83,6 +83,28 @@ app.delete('/delete-all', async (req: Request, res: Response) => {
   }
 });
 
+app.delete('/delete/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const deleteIdNumber = parseInt(id, 10);
+
+  if (isNaN(deleteIdNumber)) {
+    res.status(400).send('Invalid id');
+    return;
+  }
+
+  try {
+    const deletedRecord = await prisma.score.delete({
+      where: { id: deleteIdNumber }
+    });
+    res.status(200).json({
+      message: 'Deleted successfully',
+      deleted: deletedRecord
+    });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ error: 'Delete failed' });
+  }
+});
 
 
 app.listen(PORT, () => {

@@ -73,6 +73,19 @@ app.get('/get-all', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).send({ error: 'Something went wrong' });
     }
 }));
+app.delete('/delete-all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const deleteResult = yield prisma.score.deleteMany();
+        res.status(200).json({
+            message: 'All scores deleted successfully',
+            deletedCount: deleteResult.count
+        });
+    }
+    catch (error) {
+        console.error('Error deleting scores:', error);
+        res.status(500).json({ error: 'Something went wrong while deleting scores' });
+    }
+}));
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
